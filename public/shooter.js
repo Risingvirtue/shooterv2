@@ -10,7 +10,8 @@ var y;
 $(document).ready(function() {
 	fitToContainer(canvas);
 	socket = io.connect('http://localhost:3000');
-	spawn();
+	socket.on('spawn', spawn);
+	socket.emit('spawn');
 	update();
 	
 });
@@ -27,9 +28,9 @@ function fitToContainer(canvas){
 }
 
 
-function spawn() {
-	x = Math.floor(Math.random() * (canvas.width - r)) + r;
-	y = Math.floor(Math.random() * (canvas.height - r)) + r;
+function spawn(data) {
+	x = data.x * canvas.width;
+	y = data.y * canvas.height;
 	ctx.beginPath();
 	ctx.arc(x, y, r, 0, Math.PI * 2);
 	ctx.fill();
