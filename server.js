@@ -22,7 +22,12 @@ function newConnection(socket) {
 	function generateSpawn() {
 		var data = spawn.spawn();
 		socket.emit('spawn', data);
-		players.push({id: socket.id, socket: socket, player: new Player(data.x, data.y)}
+		players.push({id: socket.id, socket: socket, player: new Player(data.x, data.y)};
+	}
+	
+	socket.on('move', move);
+	function move(data) {
+		
 	}
 	
 }
