@@ -14,7 +14,7 @@ app.get('/', function(req, res) {
 });
 
 
-var players = [];
+var players = {};
 
 function newConnection(socket) {
 	console.log('New Connection: ' + socket.id);
@@ -22,12 +22,12 @@ function newConnection(socket) {
 	function generateSpawn() {
 		var data = spawn.spawn();
 		socket.emit('spawn', data);
-		players.push({id: socket.id, socket: socket, player: new Player(data.x, data.y)};
+		players[id] ={socket: socket, player: new Player(data.x, data.y)};
 	}
 	
 	socket.on('move', move);
 	function move(data) {
-		
+		socket.id
 	}
 	
 }
