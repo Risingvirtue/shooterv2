@@ -27,7 +27,8 @@ function newConnection(socket) {
 	
 	socket.on('move', move);
 	function move(data) {
-		socket.id
+		players[socket.id].player.move(data);
+		
 	}
 	
 }
