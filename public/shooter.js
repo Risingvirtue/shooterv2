@@ -11,8 +11,9 @@ $(document).ready(function() {
 	fitToContainer(canvas);
 	socket = io.connect('http://localhost:3000');
 	socket.on('spawn', spawn);
-	socket.emit('spawn');
-	update();
+	socket.emit('spawn', {});
+	socket.on('draw', drawShooter);
+	//update();
 	
 });
 
@@ -27,7 +28,6 @@ function fitToContainer(canvas){
 	canvas.height = Math.floor($(window).height() * 2 / 3);
 }
 
-
 function spawn(data) {
 	x = data.x * canvas.width;
 	y = data.y * canvas.height;
@@ -37,42 +37,15 @@ function spawn(data) {
 	ctx.closePath();
 }
 
-function move() {
-	if (direction.right) {
-		speedX++
-	} else if (direction.left) {
-		speedX--;
-		
-	} else {
-		speedX = 0;
-	}
-	if (direction.up) {
-		speedY--;
-		
-	} else if (direction.down) {
-		speedY++;
-		
-	} else {
-		speedY = 0;
-	}
-	speedX = Math.min(speedX, maxSpeed); speedX = Math.max(speedX, -maxSpeed);
-	speedY = Math.min(speedY, maxSpeed); speedY = Math.max(speedY, -maxSpeed);
-	x += speedX;
-	y += speedY;
-}
-
-function update() {
-	requestAnimationFrame(update);
-	move();
-	draw();
-}
-function draw() {
+function drawShooter(data) {
+	console.log('weird');
 	ctx.clearRect(0,0, canvas.width, canvas.height);
 	ctx.beginPath();
-	ctx.arc(x, y, r, 0, Math.PI * 2);
+	ctx.arc(data.x, data.y, data.r, 0, Math.PI * 2);
 	ctx.fill();
 	ctx.closePath();
 }
+
 document.body.addEventListener("keydown", function (e) {
 	var keyCode = e.keyCode;
 	if (keyCode == '87') {
@@ -84,7 +57,7 @@ document.body.addEventListener("keydown", function (e) {
 	} else if (keyCode = '65') {
 		direction.left = true;
 	}
-	
+	socket.emit('move', direction);
 });
 
 document.body.addEventListener("keyup", function (e) {
@@ -103,5 +76,5 @@ document.body.addEventListener("keyup", function (e) {
 			direction.left = false;
 			break;
 	}
-	
+	socket.emit('move', direction);
 });
